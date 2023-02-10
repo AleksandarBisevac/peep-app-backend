@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-
+import { config } from "./config";
 export default async () => {
   const connect = () => {
     mongoose
-      .connect("mongodb://127.0.0.1:27017/peep-app-backend")
+      .connect(config.DATABASE_URL as string)
       .then(() => {
         console.log("Successfully connected to MongoDB.");
       })

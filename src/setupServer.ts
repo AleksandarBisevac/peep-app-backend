@@ -15,7 +15,9 @@ import cookieSession from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
 import "express-async-errors";
 
-const SERVER_PORT = process.env.PORT || 8801;
+import { config } from "./config";
+
+const SERVER_PORT = config.PORT;
 
 export class PeepServer {
   // app is a private property of the class and represents the express app instance
@@ -38,9 +40,9 @@ export class PeepServer {
     app.use(
       cookieSession({
         name: "session",
-        keys: ["test", "test2"],
+        keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
         maxAge: 24 * 7 * 60 * 60 * 1000, // 7 days
-        secure: false, // set to true if your using https (recommended) and set the domain to your domain name (not localhost)
+        secure: config.NODE_ENV !== "development", // set to true if your using https (recommended) and set the domain to your domain name (not localhost)
       })
     );
 
@@ -48,7 +50,7 @@ export class PeepServer {
     app.use(helmet());
     app.use(
       cors({
-        origin: "*",
+        origin: config.CLIENT_URL,
         credentials: true, // allow cookies to be sent to and from the server (required for cookie-session)
         optionsSuccessStatus: HTTP_STATUS.OK,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
