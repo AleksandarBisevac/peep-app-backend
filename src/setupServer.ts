@@ -1,10 +1,15 @@
 import {
+  CustomError,
+  IErrorResponse,
+} from "./shared/globals/helpers/errorHandler";
+import {
   Application,
   json,
   urlencoded,
   Response,
   Request,
   NextFunction,
+  request,
 } from "express";
 import http from "http";
 import cors from "cors";
@@ -77,7 +82,29 @@ export class PeepServer {
   }
 
   // globalErrorHandler is a private method that adds a global error handler to the express app
-  private globalErrorHandler(app: Application): void {}
+  private globalErrorHandler(app: Application): void {
+    app.all("*", (req: Request, res: Response, next: NextFunction) => {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: "error",
+        message: `Can't find ${req.originalUrl} on this server!`,
+      });
+    });
+
+    app.use(
+      (
+        error: IErrorResponse,
+        _req: Request,
+        res: Response,
+        next: NextFunction
+      ) => {
+        console.log(error);
+        if (error instanceof CustomError) {
+          return res.status(error.statusCode).json(error.serializeErrors());
+        }
+        next();
+      }
+    );
+  }
 
   // startServer is a private method that starts the express app
   private async startServer(app: Application): Promise<void> {
