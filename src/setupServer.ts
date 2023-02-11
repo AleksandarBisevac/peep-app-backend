@@ -21,6 +21,7 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import "express-async-errors";
 
 import { config } from "./config";
+import appRoutes from "./routes";
 
 const SERVER_PORT = config.PORT;
 
@@ -71,7 +72,9 @@ export class PeepServer {
   }
 
   // routesMiddleware is a private method that adds routes middleware to the express app
-  private routesMiddleware(app: Application): void {}
+  private routesMiddleware(app: Application): void {
+    appRoutes(app);
+  }
 
   // globalErrorHandler is a private method that adds a global error handler to the express app
   private globalErrorHandler(app: Application): void {}
