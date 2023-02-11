@@ -13,6 +13,11 @@ import hpp from "hpp";
 import compression from "compression";
 import cookieSession from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
+// socket io and redis are used to create a real time connection between the server and the client
+import { Server } from "socket.io";
+import { createClient } from "redis";
+import { createAdapter } from "@socket.io/redis-adapter";
+// express-async-errors is used to handle async errors in express
 import "express-async-errors";
 
 import { config } from "./config";
@@ -75,17 +80,47 @@ export class PeepServer {
   private async startServer(app: Application): Promise<void> {
     try {
       const httpServer: http.Server = new http.Server(app); // create a new http server instance
-      this.startHttpServer(httpServer);
+      const socketIO: Server = await this.createSocketIO(httpServer); // create a new socket.io instance
+      this.startHttpServer(httpServer); // start the http server
+      this.socketIOConnections(socketIO); // define methods for socket.io to use (e.g. on connection, on disconnect)
     } catch (error) {
       console.log(error);
     }
   }
 
   // createSocketIO is a private method that creates a socket.io instance
-  private createSocketIO(httpServer: http.Server): void {}
+  private async createSocketIO(httpServer: http.Server): Promise<Server> {
+    const io: Server = new Server(httpServer, {
+      cors: {
+        origin: config.CLIENT_URL,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        // credentials: true,
+      },
+    });
+    // create a redis client and a subscriber client
+    const publicClient = createClient({ url: config.REDIS_HOST });
+    const subClient = publicClient.duplicate();
+
+    // connect to the redis server and create the adapter for socket.io to use redis as the pub/sub server
+    await Promise.all([publicClient.connect(), subClient.connect()]);
+    io.adapter(createAdapter(publicClient, subClient));
+    return io;
+  }
+
+  // define methods for socket.io to use
+  private socketIOConnections(io: Server): void {
+    // io.on("connection", (socket) => {
+    //   console.log("a user connected");
+    //   socket.on("disconnect", () => {
+    //     console.log("user disconnected");
+    //   });
+    // });
+  }
 
   // startHttpServer is a private method that starts the http server, and it will be called inside the startServer method
   private startHttpServer(httpServer: http.Server): void {
+    console.log(`Server has started with process id: ${process.pid}`);
+
     httpServer.listen(SERVER_PORT, () => {
       console.log(`Server running on port ${SERVER_PORT}`); // login library can be used to log messages to the console, don't use console.log in production
     });

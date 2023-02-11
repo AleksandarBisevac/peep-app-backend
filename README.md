@@ -44,3 +44,9 @@ npm i cors helmet hpp cookie-session compression express-async-errors http-statu
 #### mongodb packages
 
 - mongoose
+
+#### socket io packages
+
+- @socket.io/redis-adapter / allows to broadcast events between several Socket.IO servers
+- socket.io
+- redis
