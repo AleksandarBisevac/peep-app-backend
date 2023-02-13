@@ -54,3 +54,10 @@ npm i cors helmet hpp cookie-session compression express-async-errors http-statu
 #### logger package
 
 - bunyan
+
+#### ESLINT packages
+
+- eslint
+- eslint-config-prettier
+- @typescript-eslint/eslint-plugin
+- @typescript-eslint/parser
