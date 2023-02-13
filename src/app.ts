@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
-import { PeepServer } from './setupServer';
-import dbConnection from './setupDatabase';
-import { config } from './config';
+import { PeepServer } from '@root/setupServer';
+import dbConnection from '@root/setupDatabase';
+import { config } from '@root/config';
 
 class PeepApplication {
   public initialize(): void {

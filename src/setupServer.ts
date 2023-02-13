@@ -1,5 +1,5 @@
-import { CustomError, IErrorResponse } from './shared/globals/helpers/errorHandler';
-import { Application, json, urlencoded, Response, Request, NextFunction, request } from 'express';
+import { CustomError, IErrorResponse } from '@global/helpers/errorHandler';
+import { Application, json, urlencoded, Response, Request, NextFunction } from 'express';
 import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -16,8 +16,8 @@ import Logger from 'bunyan';
 // express-async-errors is used to handle async errors in express
 import 'express-async-errors';
 
-import { config } from './config';
-import appRoutes from './routes';
+import { config } from '@root/config';
+import appRoutes from '@root/routes';
 
 const SERVER_PORT = config.PORT;
 const log: Logger = config.createLogger('server');
@@ -75,7 +75,8 @@ export class PeepServer {
 
   // globalErrorHandler is a private method that adds a global error handler to the express app
   private globalErrorHandler(app: Application): void {
-    app.all('*', (req: Request, res: Response, next: NextFunction) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    app.all('*', (req: Request, res: Response, _next: NextFunction) => {
       res.status(HTTP_STATUS.NOT_FOUND).json({
         status: 'error',
         message: `Can't find ${req.originalUrl} on this server!`
