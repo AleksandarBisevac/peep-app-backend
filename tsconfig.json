@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "lib": [
-      "DOM",
-      "ES2022"
-    ] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
+    "lib": ["DOM", "ES2022"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
     "module": "CommonJS" /* Specify what module code is generated. */,
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
@@ -24,6 +21,23 @@
     "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
     "noUnusedLocals": false /* Enable error reporting when local variables aren't read. */,
     "noUnusedParameters": false /* Raise an error when a function parameter isn't read. */,
-    "pretty": true
+    "pretty": true,
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      },
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ],
+    "paths": {
+      "@global/*": ["src/shared/globals/*"],
+      "@services/*": ["src/shared/services/*"],
+      "@socket/*": ["src/shared/socket/*"],
+      "@workers/*": ["src/shared/workers/*"],
+      "@auth/*": ["src/features/auth/*"],
+      "@root/*": ["src/*"]
+    }
   }
 }
