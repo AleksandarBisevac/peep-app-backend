@@ -22,6 +22,8 @@ import HTTP_STATUS from "http-status-codes";
 import { Server } from "socket.io";
 import { createClient } from "redis";
 import { createAdapter } from "@socket.io/redis-adapter";
+// logger is used to log messages to the console
+import Logger from "bunyan";
 // express-async-errors is used to handle async errors in express
 import "express-async-errors";
 
@@ -29,6 +31,7 @@ import { config } from "./config";
 import appRoutes from "./routes";
 
 const SERVER_PORT = config.PORT;
+const log: Logger = config.createLogger("server");
 
 export class PeepServer {
   // app is a private property of the class and represents the express app instance
@@ -97,7 +100,7 @@ export class PeepServer {
         res: Response,
         next: NextFunction
       ) => {
-        console.log(error);
+        log.error(error);
         if (error instanceof CustomError) {
           return res.status(error.statusCode).json(error.serializeErrors());
         }
@@ -114,7 +117,7 @@ export class PeepServer {
       this.startHttpServer(httpServer); // start the http server
       this.socketIOConnections(socketIO); // define methods for socket.io to use (e.g. on connection, on disconnect)
     } catch (error) {
-      console.log(error);
+      log.error(error);
     }
   }
 
@@ -149,10 +152,10 @@ export class PeepServer {
 
   // startHttpServer is a private method that starts the http server, and it will be called inside the startServer method
   private startHttpServer(httpServer: http.Server): void {
-    console.log(`Server has started with process id: ${process.pid}`);
+    log.info(`Server has started with process id: ${process.pid}`);
 
     httpServer.listen(SERVER_PORT, () => {
-      console.log(`Server running on port ${SERVER_PORT}`); // login library can be used to log messages to the console, don't use console.log in production
+      log.info(`Server running on port ${SERVER_PORT}`); // login library can be used to log messages to the console, don't use console.log in production
     });
   }
 }
