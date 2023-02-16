@@ -71,3 +71,8 @@ npm i cors helmet hpp cookie-session compression express-async-errors http-statu
 
 - we use cloudinary to store our files (images)
 - use "cloudinary" package ( npm i cloudinary )
+
+#### auth
+
+- bcryptjs package for hashing
+- jsonwebtoken
