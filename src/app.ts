@@ -15,6 +15,7 @@ class PeepApplication {
   private loadConfig(): void {
     // load the configuration
     config.validateConfig();
+    config.cloudinaryConfig();
   }
 }
 

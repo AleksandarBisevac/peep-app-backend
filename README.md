@@ -66,3 +66,8 @@ npm i cors helmet hpp cookie-session compression express-async-errors http-statu
 
 - ttypescript // helps us to build the app (because of the changed paths)
 - typescript-transform-paths // help us to transform the paths after the build to normal absolute paths (reverse process)
+
+#### file storage
+
+- we use cloudinary to store our files (images)
+- use "cloudinary" package ( npm i cloudinary )
