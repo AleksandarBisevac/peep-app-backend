@@ -19,7 +19,7 @@ export function uploads(
         if (error) {
           resolve(error);
         } else {
-          resolve(result);
+          resolve(result as UploadApiResponse);
         }
       }
     );
