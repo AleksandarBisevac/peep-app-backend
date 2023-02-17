@@ -76,3 +76,10 @@ npm i cors helmet hpp cookie-session compression express-async-errors http-statu
 
 - bcryptjs package for hashing
 - jsonwebtoken
+
+### REDIS GUI
+
+- user redis-commander
+- npm i -g redis-commander
+- command to run commander:
+  - redis-commander
