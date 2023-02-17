@@ -38,6 +38,7 @@
       "@workers/*": ["src/shared/workers/*"],
       "@decorators/*": ["src/shared/decorators/*"],
       "@auth/*": ["src/features/auth/*"],
+      "@user/*": ["src/features/user/*"],
       "@root/*": ["src/*"]
     }
   }
