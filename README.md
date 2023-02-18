@@ -83,3 +83,11 @@ npm i cors helmet hpp cookie-session compression express-async-errors http-statu
 - npm i -g redis-commander
 - command to run commander:
   - redis-commander
+
+### Queue manager
+
+- npm i bull --save
+- npm i @types/bull --save-dev
+- gui for bull
+  - @bull-board/express
+  - @bull-board/ui
