@@ -1,3 +1,4 @@
+import { Helpers } from '@global/helpers/helper';
 import { ServerError } from '@global/helpers/errorHandler';
 import { BaseCache } from '@services/redis/baseCache';
 import { IUserDocument } from '@user/interfaces/userInterface';
@@ -91,6 +92,29 @@ export class UserCache extends BaseCache {
       }
       await this.client.ZADD('user', { score: parseInt(userUId, 10), value: `${key}` });
       await this.client.HSET(`users:${key}`, dataToSave);
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server Error. Try again.');
+    }
+  }
+
+  public async getUserFromCache(userId: string): Promise<IUserDocument | null> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      const response: IUserDocument = (await this.client.HGETALL(`users:${userId}`)) as unknown as IUserDocument;
+
+      response.createdAt = new Date(Helpers.parseJSON(`${response.createdAt}`));
+      response.postsCount = Helpers.parseJSON(`${response.postsCount}`);
+      response.social = Helpers.parseJSON(`${response.social}`);
+      response.followersCount = Helpers.parseJSON(`${response.followersCount}`);
+      response.followingCount = Helpers.parseJSON(`${response.followingCount}`);
+      response.notifications = Helpers.parseJSON(`${response.notifications}`);
+      response.blocked = Helpers.parseJSON(`${response.blocked}`);
+      response.blockedBy = Helpers.parseJSON(`${response.blockedBy}`);
+
+      return response;
     } catch (error) {
       log.error(error);
       throw new ServerError('Server Error. Try again.');
