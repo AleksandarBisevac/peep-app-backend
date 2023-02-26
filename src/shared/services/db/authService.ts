@@ -3,6 +3,9 @@ import { AuthModel } from '@auth/models/AuthSchema';
 import { Helpers } from '@global/helpers/helper';
 
 class AuthService {
+  public async createAuthUser(data: IAuthDocument): Promise<void> {
+    await AuthModel.create(data);
+  }
   public async getUserByUsernameOrEmail(username: string, email: string): Promise<IAuthDocument | null> {
     const query = {
       $or: [{ username: Helpers.firstLetterToUpperCase(username) }, { email: email.toLowerCase() }]
