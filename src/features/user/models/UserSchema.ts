@@ -4,7 +4,8 @@ import { Model, model, Schema } from 'mongoose';
 const userSchema: Schema = new Schema({
   authId: {
     type: Schema.Types.ObjectId,
-    ref: 'Auth'
+    ref: 'Auth',
+    index: true
   },
   profilePicture: {
     type: String,
